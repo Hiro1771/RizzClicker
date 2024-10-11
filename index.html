@@ -1,0 +1,116 @@
+<HTML>
+<head>
+<title>Rizz clicker</title>
+
+<style>
+.sectionLeft {
+float: left;
+width: 30%;
+}
+
+.sectionRight {
+float: right;
+}
+
+.scoreContainer {
+background-color: rgba(65, 189, 125, 0.6);
+width: 75%;
+padding: 10px;
+border-radius: 10px;
+font-size: 24px;
+font-weight: bold;
+}
+
+.clickerContainer img {
+position: relative;
+transion: all .2s ease-in-out;
+}
+.clickerContainer img:hover { transform: scale(1.10); }
+.clickerContainer img:active { transform: scale(0.99); }
+
+body {
+    background-color: purple;
+}
+
+button {
+    background-color: red;
+    font-family: 'Courier New', Courier, monospace;
+}
+</style>
+</head>
+	
+<body>
+<div class="sectionLeft">
+<center>
+<div class="scoreContainer">
+<span id="score">0</span>:Rizz<br>
+<span id="scorepersecond">0</span>:Rizz per second
+</div>
+<br>
+<div class="clikcerContainer">
+<img src="images/rizz.png" height="256px" width="256px" onclick="addToScore(clickingPower)">
+</div>
+</center>
+</div>
+
+<div class="sectionleft">
+<button onclick="buyCursor()">Aura [<span id="cursorcost">15</span>] -- <span id="cursors">0</span></button>
+<button onclick="buyPrinter()">Gyatt [<span id="printercost">100</span>] -- <span id="printers">0</span></button>
+</div>
+
+<script>
+var score = 0;
+var clickingPower = 1;
+
+var cursorCost = 15;
+var cursors = 0;
+var printerCost = 100;
+var printers = 0;
+
+function buyCursor() {
+if (score >= cursorCost) {
+score = score - cursorCost;
+cursors = cursors + 1;
+cursorCost = Math.round(cursorCost * 1.15);
+
+document.getElementById("score").innerHTML = score;
+document.getElementById("cursorcost").innerHTML = cursorCost;
+document.getElementById("cursors").innerHTML = cursors;
+updateScorePerSecond();
+}
+}
+
+function buyPrinter() {
+if (score >= printerCost) {
+score = score - printerCost;
+printers = printers + 1;
+printerCost = Math.round(printerCost * 1.15);
+
+document.getElementById("score").innerHTML = score;
+document.getElementById("printercost").innerHTML = printerCost;
+document.getElementById("printers").innerHTML = printers;
+updateScorePerSecond();
+}
+}
+
+function addToScore(amount) {
+score = score + amount;
+document.getElementById("score").innerHTML = score;
+}
+
+function updateScorePerSecond() {
+scorePerSecond = cursors + printers * 5;
+document.getElementById("scorepersecond").innerHTML = scorePerSecond;
+
+}
+
+setInterval(function() {
+score = score + cursors;
+score = score + printers * 5;
+document.getElementById("score").innerHTML = score;
+
+document.title = score + ":Money - Money Clicker"
+}, 1000); // 1000ms = 1 second
+</script>
+</body>
+</HTML>

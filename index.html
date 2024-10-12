@@ -49,6 +49,7 @@ h2 {
     color: rgb(0, 0, 0);
     border-radius: 20px;
 }
+
 </style>
 </head>
 	
@@ -67,6 +68,7 @@ h2 {
 <!-- hitwebcounter Code START -->
 <a href="https://www.hitwebcounter.com" target="_blank">
     <img src="https://hitwebcounter.com/counter/counter.php?page=16790614&style=0025&nbdigits=4&type=page&initCount=0" title="Counter Widget" Alt="Visit counter For Websites"   border="0" /></a>
+<br>
 
 </div>
 </center>
@@ -77,7 +79,10 @@ h2 {
 <button onclick="buyPrinter()">Gyatt [<span id="printercost">100</span>] -- <span id="printers">0</span></button>
 <button onclick="buyJawLine()">Jaw Line [<span id="jawlinecost">200</span>] -- <span id="jawline">0</span></button>
 <button onclick="buyOhioRizz()">Ohio Rizz [<span id="ohiorizzcost">1000</span>] -- <span id="ohiorizz">0</span></button>
+<button onclick="buySigma()">Sigma [<span id="sigmacost">1000</span>] -- <span id="sigma">0</span></button>
 </div>
+
+<button onclick="saveGame();">Save Game</button>
 
 <script>
 var score = 0;
@@ -91,6 +96,8 @@ var jawline = 0;
 var jawlinecost = 200;
 var ohiorizz = 0;
 var ohiorizzcost = 1000;
+var sigma = 0;
+var sigmacost = 3000;
 
 function buyCursor() {
 if (score >= cursorCost) {
@@ -144,23 +151,91 @@ updateScorePerSecond();
 }
 }
 
+function buySigma() {
+if (score >= sigmacost) {
+score = score - sigmacost;
+sigma = sigma + 1;
+sigmacost = Math.round(sigmacost * 1.15);
+
+document.getElementById("score").innerHTML = score;
+document.getElementById("sigmacost").innerHTML = sigmacost;
+document.getElementById("sigma").innerHTML = sigma;
+updateScorePerSecond();
+}
+}
+
 function addToScore(amount) {
 score = score + amount;
 document.getElementById("score").innerHTML = score;
 }
 
 function updateScorePerSecond() {
-scorePerSecond = cursors + printers * 5 + jawline * 15 + ohiorizz * 50;
+scorePerSecond = cursors + printers * 5 + jawline * 15 + ohiorizz * 50 + sigma * 150;
 document.getElementById("scorepersecond").innerHTML = scorePerSecond;
 
 }
+
+function loadGame() {
+    var savedGame = JSON.parse(localStorage.getItem("gameSave"))
+    if (typeof savedGame.score !== "undefined") score = savedGame.score;
+    if (typeof savedGame.clickingPower !== "undefined") clickingPower = savedGame.clickingPower;
+    if (typeof savedGame.cursorCost !== "undefined") cursorCost = savedGame.cursorCost;
+    if (typeof savedGame.cursors !== "undefined") cursors = savedGame.cursors;
+    if (typeof savedGame.printerCost !== "undefined") printerCost = savedGame.printerCost;
+    if (typeof savedGame.printers !== "undefined") printers = savedGame.printers;
+    if (typeof savedGame.jawlinecost !== "undefined") jawlinecost = savedGame.jawlinecost;
+    if (typeof savedGame.jawline !== "undefined") jawline = savedGame.jawline;
+    if (typeof savedGame.ohiorizzcost !== "undefined") ohiorizzcost = savedGame.ohiorizzcost;
+    if (typeof savedGame.ohiorizz !== "undefined") ohiorizz = savedGame.ohiorizz;
+    if (typeof savedGame.sigmacost !== "undefined") sigmacost = savedGame.sigmacost;
+    if (typeof savedGame.sigma !== "undefined") sigma = savedGame.sigma;
+}
+
+function saveGame() {
+    var gameSave = {
+        score: score,
+        clickingPower: clickingPower,
+        cursorCost: cursorCost,
+        cursors: cursors,
+        printerCost: printerCost,
+        printers: printers,
+        jawlinecost: jawlinecost,
+        jawline: jawline,
+        ohiorizzcost: ohiorizzcost,
+        ohiorizz: ohiorizz,
+        sigmacost: sigmacost,
+        sigma: sigma
+    };
+    localStorage.setItem("gameSave", JSON.stringify(gameSave));
+}
+
+window.onload = function() {
+    loadGame();
+    updateScorePerSecond();
+    document.getElementById("score").innerHTML = score;
+    document.getElementById("cursorcost").innerHTML = cursorCost;
+    document.getElementById("cursors").innerHTML = cursors;
+    document.getElementById("printercost").innerHTML = printerCost;
+    document.getElementById("printers").innerHTML = printers;
+    document.getElementById("jawlinecost").innerHTML = jawlinecost;
+    document.getElementById("jawline").innerHTML = jawline;
+    document.getElementById("ohiorizzcost").innerHTML = ohiorizzcost;
+    document.getElementById("ohiorizz").innerHTML = ohiorizz;
+    document.getElementById("sigmacost").innerHTML = sigmacost;
+    document.getElementById("sigma").innerHTML = sigma;
+};
 
 setInterval(function() {
 score = score + cursors;
 score = score + printers * 5;
 score = score + jawline * 15;
 score = score + ohiorizz * 50;
+score = score + sigma * 150
 document.getElementById("score").innerHTML = score;
+
+setInterval(function() {
+    saveGame();   
+}, 30000);
 
 document.title = score + ":Rizz - Rizz Clicker"
 }, 1000); // 1000ms = 1 second

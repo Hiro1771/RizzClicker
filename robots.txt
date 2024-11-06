@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://rizzclicker.mooo.com/sitemap.xml
